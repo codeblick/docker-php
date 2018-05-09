@@ -31,7 +31,10 @@ RUN apt-get update -qq && \
         docker-php-ext-enable xdebug && \
         pecl install APCu-4.0.10 && \
         docker-php-ext-enable apcu && \
-        a2enmod rewrite
+        a2enmod rewrite && \
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=AT/ST=Vienna/L=Vienna/O=Security/OU=Development/CN=example.com" && \
+        a2ensite default-ssl && \
+        a2enmod ssl
 
 ADD 00-zend.ini /usr/local/etc/php/conf.d/00-zend.ini
 ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
