@@ -39,5 +39,6 @@ ADD 00-zend.ini /usr/local/etc/php/conf.d/00-zend.ini
 ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 ADD ext /usr/local/etc/php/ext
 
+EXPOSE 443
 EXPOSE 9000
 ENV PHP_IDE_CONFIG="serverName=localhost"
