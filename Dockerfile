@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.0-apache
 
 RUN apt-get update -qq && \
     apt-get install -y -qq \
@@ -28,10 +28,7 @@ RUN apt-get update -qq && \
     docker-php-ext-enable xdebug && \
     pecl install apcu && \
     docker-php-ext-enable apcu && \
-    a2enmod rewrite && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=DE/ST=Berlin/L=Berlin/O=Security/OU=Development/CN=localhost" && \
-    a2ensite default-ssl && \
-    a2enmod ssl
+    a2enmod rewrite
 
 ADD 00-zend.ini /usr/local/etc/php/conf.d/00-zend.ini
 ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
