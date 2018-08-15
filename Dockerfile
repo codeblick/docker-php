@@ -17,5 +17,6 @@ ADD php-config.ini /etc/php5/conf.d/php-config.ini
 ADD ext /etc/php5/ext
 
 VOLUME ["/var/www/html"]
+EXPOSE 80
 
 CMD bash -c "source /etc/apache2/envvars && /usr/sbin/apache2 -DFOREGROUND"
