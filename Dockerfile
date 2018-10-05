@@ -1,5 +1,6 @@
-FROM php:7.0-apache
+FROM php:7.0-fpm
 
+ENV PHP_IDE_CONFIG="serverName=localhost"
 ENV PHP_XDEBUG=0
 ENV PHP_MEMORY_LIMIT=512M
 ENV PHP_MAX_EXECUTION_TIME=60
@@ -34,13 +35,10 @@ RUN apt-get update -qq && \
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     pecl install apcu && \
-    docker-php-ext-enable apcu && \
-    a2enmod rewrite
+    docker-php-ext-enable apcu
 
 ADD 00-zend.ini /usr/local/etc/php/conf.d/00-zend.ini
 ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 ADD ext /usr/local/etc/php/ext
 
-EXPOSE 443
-EXPOSE 9000
-ENV PHP_IDE_CONFIG="serverName=localhost"
+EXPOSE 9009
