@@ -1,5 +1,12 @@
 FROM php:7.1-apache
 
+ENV PHP_XDEBUG=0
+ENV PHP_MEMORY_LIMIT=512M
+ENV PHP_MAX_EXECUTION_TIME=60
+ENV UPLOAD_MAX_FILE_SIZE=50M
+ENV POST_MAX_FILE_SIZE=50M
+ENV OPCACHE_ENABLE=1
+
 RUN apt-get update -qq && \
     apt-get install -y -qq \
         libfreetype6-dev \
