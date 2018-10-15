@@ -12,7 +12,7 @@ RUN apt-get update -qq && \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
-        libpng12-dev \
+        libpng-dev \
         libcurl4-gnutls-dev \
         libxml2-dev \
         zip && \
