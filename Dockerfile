@@ -9,6 +9,9 @@ ENV OPCACHE_ENABLE=1
 
 RUN apt-get update -qq && \
     apt-get install -y -qq \
+        ibpq-dev \
+        libmemcached-dev \
+        curl \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
@@ -41,6 +44,14 @@ RUN apt-get update -qq && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=AT/ST=Vienna/L=Vienna/O=Security/OU=Development/CN=example.com" && \
     a2ensite default-ssl && \
     a2enmod ssl
+
+# Install Memcached for php 7
+RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" \
+    && mkdir -p /usr/src/php/ext/memcached \
+    && tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
+    && docker-php-ext-configure memcached \
+    && docker-php-ext-install memcached \
+    && rm /tmp/memcached.tar.gz
 
 ADD 00-zend.ini /usr/local/etc/php/conf.d/00-zend.ini
 ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
