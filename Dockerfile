@@ -9,7 +9,6 @@ ENV OPCACHE_ENABLE=1
 
 RUN apt-get update -qq && \
     apt-get install -y -qq \
-        ibpq-dev \
         libmemcached-dev \
         curl \
         libfreetype6-dev \
