@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.2-fpm
 
 ENV PHP_XDEBUG=0
 ENV PHP_MEMORY_LIMIT=512M
@@ -13,7 +13,6 @@ RUN apt-get update -qq && \
         curl \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libmcrypt-dev \
         libpng-dev \
         libcurl4-gnutls-dev \
         libxml2-dev \
@@ -21,7 +20,6 @@ RUN apt-get update -qq && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install \
         iconv \
-        mcrypt \
         mbstring \
         gd \
         opcache \
@@ -38,11 +36,7 @@ RUN apt-get update -qq && \
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     pecl install apcu && \
-    docker-php-ext-enable apcu && \
-    a2enmod rewrite && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=AT/ST=Vienna/L=Vienna/O=Security/OU=Development/CN=example.com" && \
-    a2ensite default-ssl && \
-    a2enmod ssl
+    docker-php-ext-enable apcu
 
 # Install Memcached for php 7
 RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" \
