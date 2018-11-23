@@ -1,9 +1,20 @@
 FROM php:7.2-apache
 
+ENV PHP_IDE_CONFIG="serverName=localhost"
+ENV PHP_XDEBUG=0
+ENV PHP_MEMORY_LIMIT=512M
+ENV PHP_MAX_EXECUTION_TIME=60
+ENV UPLOAD_MAX_FILE_SIZE=50M
+ENV POST_MAX_FILE_SIZE=50M
+ENV OPCACHE_ENABLE=1
+
 RUN apt-get update -qq && \
     apt-get install -y -qq \
+        libmemcached-dev \
+        curl \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
+        libmcrypt-dev \
         libpng-dev \
         libcurl4-gnutls-dev \
         libxml2-dev \
@@ -11,6 +22,7 @@ RUN apt-get update -qq && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install \
         iconv \
+        mcrypt \
         mbstring \
         gd \
         opcache \
@@ -33,10 +45,20 @@ RUN apt-get update -qq && \
     a2ensite default-ssl && \
     a2enmod ssl
 
-ADD 00-zend.ini /usr/local/etc/php/conf.d/00-zend.ini
+# Install Memcached for PHP 7
+RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" \
+    && mkdir -p /usr/src/php/ext/memcached \
+    && tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
+    && docker-php-ext-configure memcached \
+    && docker-php-ext-install memcached \
+    && rm /tmp/memcached.tar.gz
+
+# Install Redis for PHP 7
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
 ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 ADD ext /usr/local/etc/php/ext
 
 EXPOSE 443
 EXPOSE 9000
-ENV PHP_IDE_CONFIG="serverName=localhost"
