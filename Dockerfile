@@ -1,5 +1,6 @@
 FROM php:7.2-apache
 
+ENV REDIS_VERSION 4.2.0
 ENV PHP_IDE_CONFIG="serverName=localhost"
 ENV PHP_XDEBUG=0
 ENV PHP_MEMORY_LIMIT=512M
@@ -52,11 +53,14 @@ RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-m
     && rm /tmp/memcached.tar.gz
 
 # Install Redis for PHP 7
-RUN pecl install redis \
-    && docker-php-ext-enable redis
+RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$REDIS_VERSION.tar.gz \
+    && tar xfz /tmp/redis.tar.gz \
+    && rm -r /tmp/redis.tar.gz \
+    && mkdir -p /usr/src/php/ext \
+    && mv phpredis-* /usr/src/php/ext/redis
+RUN docker-php-ext-install redis
 
 ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
-ADD ext /usr/local/etc/php/ext
 
 EXPOSE 443
 EXPOSE 9000
