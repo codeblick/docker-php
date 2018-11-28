@@ -42,7 +42,9 @@ RUN apt-get update -qq && \
     a2enmod rewrite && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=DE/ST=Berlin/L=Berlin/O=Security/OU=Development/CN=localhost" && \
     a2ensite default-ssl && \
-    a2enmod ssl
+    a2enmod ssl && \
+    a2enmod headers && \
+    a2enmod expires
 
 # Install Memcached for PHP 7
 RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" \
