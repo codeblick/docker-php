@@ -4,6 +4,8 @@
 
 # codeblick/php
 
+This image is based on the official docker php images.
+
 ## Supported tags
 
 - `7.2-apache` `7.1-apache` `7.0-apache` `5.6-apache`
