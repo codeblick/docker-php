@@ -1,6 +1,6 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/codeblick/php.svg)](https://hub.docker.com/r/codeblick/php/)
 [![Docker Stars](https://img.shields.io/docker/stars/codeblick/php.svg)](https://hub.docker.com/r/codeblick/php/)
-[![Build Status](https://travis-ci.org/codeblick/docker-shopware.svg?branch=master)](https://travis-ci.org/codeblick/docker-php)
+[![Build Status](https://travis-ci.org/codeblick/docker-php.svg?branch=master)](https://travis-ci.org/codeblick/docker-php)
 
 # codeblick/php
 
