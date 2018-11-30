@@ -1,15 +1,34 @@
-FROM php:7.2-apache
+ARG COB_IMAGE
+ARG COB_PHP_VERSION
 
-ENV REDIS_VERSION 4.2.0
-ENV PHP_IDE_CONFIG="serverName=localhost"
-ENV PHP_XDEBUG=0
-ENV PHP_MEMORY_LIMIT=512M
+FROM php:${COB_PHP_VERSION}-${COB_IMAGE}
+
+ARG COB_IMAGE
+ARG COB_PHP_VERSION
+ARG COB_REDIS_VERSION
+ARG COB_MEMCACHED_VERSION
+ARG COB_XDEBUG_VERSION
+ARG COB_APCU_VERSION
+
+# PHP Config
 ENV PHP_MAX_EXECUTION_TIME=60
-ENV UPLOAD_MAX_FILE_SIZE=50M
-ENV POST_MAX_FILE_SIZE=50M
-ENV OPCACHE_ENABLE=1
+ENV PHP_MEMORY_LIMIT=512M
+ENV PHP_UPLOAD_MAX_FILESIZE=50M
+ENV PHP_POST_MAX_SIZE=50M
+ENV PHP_DATE_TIMEZONE=Europe/Berlin
+ENV PHP_OPCACHE_ENABLE=1
+ENV PHP_OPCACHE_MAX_ACCELERATED_FILES=20000
+ENV PHP_OPCACHE_MEMORY_CONSUMPTION=256M
+ENV PHP_OPCACHE_REVALIDATE_FREQ=60
 
-RUN apt-get update -qq && \
+COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
+
+# ionCube Loader
+COPY ioncube/ioncube_loader_lin_${COB_PHP_VERSION}.so /usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so
+
+RUN echo 'zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so' > /usr/local/etc/php/conf.d/00-zend.ini && \
+    # miscellanious php extensions and dependencies
+    apt-get update -qq && \
     apt-get install -y -qq \
         libmemcached-dev \
         curl \
@@ -35,34 +54,25 @@ RUN apt-get update -qq && \
         soap \
         tokenizer \
         zip && \
-    pecl install xdebug && \
+    pecl install xdebug${COB_XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug && \
-    pecl install apcu && \
+    pecl install apcu${COB_APCU_VERSION} && \
     docker-php-ext-enable apcu && \
-    a2enmod rewrite && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=DE/ST=Berlin/L=Berlin/O=Security/OU=Development/CN=localhost" && \
-    a2ensite default-ssl && \
-    a2enmod ssl && \
-    a2enmod headers && \
-    a2enmod expires
-
-# Install Memcached for PHP 7
-RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" \
-    && mkdir -p /usr/src/php/ext/memcached \
-    && tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
-    && docker-php-ext-configure memcached \
-    && docker-php-ext-install memcached \
-    && rm /tmp/memcached.tar.gz
-
-# Install Redis for PHP 7
-RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$REDIS_VERSION.tar.gz \
-    && tar xfz /tmp/redis.tar.gz \
-    && rm -r /tmp/redis.tar.gz \
-    && mkdir -p /usr/src/php/ext \
-    && mv phpredis-* /usr/src/php/ext/redis
-RUN docker-php-ext-install redis
-
-ADD php-config.ini /usr/local/etc/php/conf.d/php-config.ini
-
-EXPOSE 443
-EXPOSE 9000
+    # memcached php extension
+    curl -L -o /tmp/memcached.tar.gz https://github.com/php-memcached-dev/php-memcached/archive/${COB_MEMCACHED_VERSION}.tar.gz && \
+    mkdir -p /usr/src/php/ext/memcached && \
+    tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 && \
+    docker-php-ext-configure memcached && \
+    docker-php-ext-install memcached && \
+    rm /tmp/memcached.tar.gz && \
+    # redis php extension
+    curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/${COB_REDIS_VERSION}.tar.gz && \
+    tar xfz /tmp/redis.tar.gz && \
+    rm -r /tmp/redis.tar.gz && \
+    mkdir -p /usr/src/php/ext && \
+    mv phpredis-* /usr/src/php/ext/redis && \
+    docker-php-ext-install redis && \
+    # mcrypt for php < 7.2
+    if [ "${COB_PHP_VERSION}" != "7.2" ] ; then apt-get install -y -qq libmcrypt-dev && docker-php-ext-install mcrypt ; fi && \
+    # some apache modules
+    if [ "${COB_IMAGE}" = "apache" ] ; then a2enmod rewrite && a2enmod headers && a2enmod expires; fi
