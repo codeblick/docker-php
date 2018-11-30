@@ -21,11 +21,19 @@ ENV PHP_OPCACHE_MAX_ACCELERATED_FILES=20000
 ENV PHP_OPCACHE_MEMORY_CONSUMPTION=256M
 ENV PHP_OPCACHE_REVALIDATE_FREQ=60
 
+ENV PHP_FPM_MAX_CHILDREN=64
+ENV PHP_FPM_START_SERVERS=16
+ENV PHP_FPM_MIN_SPARE_SERVERS=16
+ENV PHP_FPM_MAX_SPARE_SERVERS=24
+ENV PHP_FPM_MAX_REQUESTS=500
+
 COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
+COPY www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # ionCube Loader
 COPY ioncube/ioncube_loader_lin_${COB_PHP_VERSION}.so /usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so
 
+ARG COB_PHP_VERSION
 RUN echo 'zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so' > /usr/local/etc/php/conf.d/00-zend.ini && \
     # miscellanious php extensions and dependencies
     apt-get update -qq && \
