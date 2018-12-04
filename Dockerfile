@@ -28,6 +28,7 @@ ENV PHP_FPM_MAX_SPARE_SERVERS=24
 ENV PHP_FPM_MAX_REQUESTS=500
 
 COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
+COPY envvars /etc/apache2/envvars
 COPY www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # ionCube Loader
