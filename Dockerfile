@@ -39,7 +39,7 @@ COPY www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY ioncube/ioncube_loader_lin_${COB_PHP_VERSION}.so /usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so
 
 ARG COB_PHP_VERSION
-RUN echo 'zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so' > /usr/local/etc/php/conf.d/00-zend.ini && \
+RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so" > /usr/local/etc/php/conf.d/00-zend.ini && \
     # miscellanious php extensions and dependencies
     apt-get update -qq && \
     apt-get install -y -qq \
