@@ -89,4 +89,4 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
     if [ "${COB_PHP_VERSION}" != "7.2" ] ; then apt-get install -y -qq libmcrypt-dev && docker-php-ext-install mcrypt ; fi && \
     # some apache modules
     if [ "${COB_IMAGE}" = "apache" ] ; then a2enmod rewrite && a2enmod headers && a2enmod expires; fi && \
-    if [ "${COB_IMAGE}" = "cli" ] ; then pecl install swoole && echo "extension=swoole.so" >> "$PHP_INI_DIR/php.ini"; fi
+    if [ "${COB_IMAGE}" = "cli"] && ["${COB_PHP_VERSION}" != "5.6"] ; then pecl install swoole && echo "extension=swoole.so" >> "$PHP_INI_DIR/php.ini"; fi
