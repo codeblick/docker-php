@@ -34,6 +34,7 @@ ENV PHP_XDEBUG_PORT=9000
 COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 COPY envvars /etc/apache2/envvars
 COPY www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY apache2.conf /etc/apache2/apache2.conf
 
 # ionCube Loader
 COPY ioncube/ioncube_loader_lin_${COB_PHP_VERSION}.so /usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so
@@ -69,6 +70,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
         soap \
         tokenizer \
         zip && \
+    if [ "${COB_PHP_VERSION}" != "5.6" ] ; then docker-php-ext-install mysql ; fi && \
     pecl install xdebug${COB_XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug && \
     pecl install apcu${COB_APCU_VERSION} && \
