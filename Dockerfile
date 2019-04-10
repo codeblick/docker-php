@@ -70,7 +70,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
         soap \
         tokenizer \
         zip && \
-    if [ "${COB_PHP_VERSION}" != "5.6" ] ; then docker-php-ext-install mysql ; fi && \
+    if [ "${COB_PHP_VERSION}" = "5.6" ] ; then docker-php-ext-install mysql ; fi && \
     pecl install xdebug${COB_XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug && \
     pecl install apcu${COB_APCU_VERSION} && \
