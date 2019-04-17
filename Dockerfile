@@ -51,6 +51,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
         libpng-dev \
         libcurl4-gnutls-dev \
         libxml2-dev \
+        libpq-dev \
         zip \
         jpegoptim \
         optipng && \
@@ -63,6 +64,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
         mysqli \
         pdo \
         pdo_mysql \
+        pdo_pgsql \
         curl \
         xml \
         json \
