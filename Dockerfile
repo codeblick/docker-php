@@ -30,6 +30,7 @@ ENV PHP_FPM_MAX_REQUESTS=500
 ENV PHP_XDEBUG_ENABLE=0
 ENV PHP_XDEBUG_HOST=10.254.254.254
 ENV PHP_XDEBUG_PORT=9000
+ENV PHP_XDEBUG_MAX_NESTING_LEVEL=1024
 
 COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 COPY envvars /etc/apache2/envvars
