@@ -32,6 +32,8 @@ ENV PHP_XDEBUG_HOST=10.254.254.254
 ENV PHP_XDEBUG_PORT=9000
 ENV PHP_XDEBUG_MAX_NESTING_LEVEL=1024
 
+ENV APACHE_DOCUMENT_ROOT=/var/www/html
+
 COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 COPY envvars /etc/apache2/envvars
 COPY www.conf /usr/local/etc/php-fpm.d/www.conf
@@ -39,6 +41,9 @@ COPY apache2.conf /etc/apache2/apache2.conf
 
 # ionCube Loader
 COPY ioncube/ioncube_loader_lin_${COB_PHP_VERSION}.so /usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so
+
+COPY start.sh /usr/bin/start.sh
+RUN chmod +x /usr/bin/start.sh
 
 ARG COB_PHP_VERSION
 RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so" > /usr/local/etc/php/conf.d/00-zend.ini && \
@@ -98,3 +103,5 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
     # some apache modules
     if [ "${COB_IMAGE}" = "apache" ] ; then a2enmod rewrite && a2enmod headers && a2enmod expires; fi && \
     if [ "${COB_IMAGE}" = "cli"] && ["${COB_PHP_VERSION}" != "5.6"] ; then pecl install swoole && echo "extension=swoole.so" >> "$PHP_INI_DIR/php.ini"; fi
+
+CMD ["/usr/bin/start.sh"]
