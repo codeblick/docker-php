@@ -14,16 +14,16 @@ build() {
 }
 
 build 7.2 4.2.0 v3.0.4 apache
-build 7.1 4.2.0 v3.0.4 apache
-build 7.0 4.2.0 v3.0.4 apache
-build 5.6 3.1.6 2.2.0 apache -2.5.5 -4.0.10
+#build 7.1 4.2.0 v3.0.4 apache
+#build 7.0 4.2.0 v3.0.4 apache
+#build 5.6 3.1.6 2.2.0 apache -2.5.5 -4.0.10
 
-build 7.2 4.2.0 v3.0.4 fpm
-build 7.1 4.2.0 v3.0.4 fpm
-build 7.0 4.2.0 v3.0.4 fpm
-build 5.6 3.1.6 2.2.0 fpm -2.5.5 -4.0.10
+#build 7.2 4.2.0 v3.0.4 fpm
+#build 7.1 4.2.0 v3.0.4 fpm
+#build 7.0 4.2.0 v3.0.4 fpm
+#build 5.6 3.1.6 2.2.0 fpm -2.5.5 -4.0.10
 
-build 7.2 4.2.0 v3.0.4 cli
-build 7.1 4.2.0 v3.0.4 cli
-build 7.0 4.2.0 v3.0.4 cli
-build 5.6 3.1.6 2.2.0 cli -2.5.5 -4.0.10
+#build 7.2 4.2.0 v3.0.4 cli
+#build 7.1 4.2.0 v3.0.4 cli
+#build 7.0 4.2.0 v3.0.4 cli
+#build 5.6 3.1.6 2.2.0 cli -2.5.5 -4.0.10
