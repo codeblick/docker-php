@@ -61,6 +61,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
         libpq-dev \
         zip \
         jpegoptim \
+        pngquant \
         optipng && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install \
