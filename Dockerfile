@@ -50,6 +50,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
     # miscellanious php extensions and dependencies
     apt-get update -qq && \
     apt-get install -y -qq \
+        libmagickwand-dev \
         libmemcached-dev \
         curl \
         libfreetype6-dev \
@@ -84,6 +85,8 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
     docker-php-ext-enable xdebug && \
     pecl install apcu${COB_APCU_VERSION} && \
     docker-php-ext-enable apcu && \
+    pecl install imagick && \
+    docker-php-ext-enable imagick && \
     # memcached php extension
     curl -L -o /tmp/memcached.tar.gz https://github.com/php-memcached-dev/php-memcached/archive/${COB_MEMCACHED_VERSION}.tar.gz && \
     mkdir -p /usr/src/php/ext/memcached && \
