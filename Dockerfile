@@ -83,6 +83,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
         gettext \
         zip && \
     pecl install vips && \
+    docker-php-ext-enable vips && \
     if [ "${COB_PHP_VERSION}" = "5.6" ] ; then docker-php-ext-install mysql ; fi && \
     pecl install xdebug${COB_XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug && \
