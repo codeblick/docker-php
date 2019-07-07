@@ -50,6 +50,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
     # miscellanious php extensions and dependencies
     apt-get update -qq && \
     apt-get install -y -qq \
+        libvips-dev \
         libmagickwand-dev \
         libmemcached-dev \
         curl \
@@ -81,6 +82,7 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
         tokenizer \
         gettext \
         zip && \
+    pecl install vips && \
     if [ "${COB_PHP_VERSION}" = "5.6" ] ; then docker-php-ext-install mysql ; fi && \
     pecl install xdebug${COB_XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug && \
