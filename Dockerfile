@@ -34,6 +34,9 @@ ENV PHP_XDEBUG_MAX_NESTING_LEVEL=1024
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
 
+ENV DISPLAY=:99
+ENV CHROME_BIN=/usr/bin/google-chrome
+
 COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 COPY envvars /etc/apache2/envvars
 COPY www.conf /usr/local/etc/php-fpm.d/www.conf
