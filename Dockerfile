@@ -34,15 +34,32 @@ ENV PHP_XDEBUG_MAX_NESTING_LEVEL=1024
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
 
-ENV DISPLAY=:99
-ENV CHROME_BIN=/usr/bin/google-chrome
-
 COPY php-config.ini /usr/local/etc/php/conf.d/php-config.ini
 COPY envvars /etc/apache2/envvars
 COPY www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY apache2.conf /etc/apache2/apache2.conf
 
-COPY google-chrome-stable_current_amd64.deb /tmp/google-chrome-stable_current_amd64.deb
+RUN apt-get update && apt-get install -y \
+	apt-transport-https \
+	ca-certificates \
+	curl \
+	gnupg \
+	--no-install-recommends \
+	&& curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+	&& echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
+	&& apt-get update && apt-get install -y \
+	google-chrome-stable \
+	fontconfig \
+	fonts-ipafont-gothic \
+	fonts-wqy-zenhei \
+	fonts-thai-tlwg \
+	fonts-kacst \
+	fonts-symbola \
+	fonts-noto \
+	ttf-freefont \
+	--no-install-recommends \
+	&& apt-get purge --auto-remove -y curl gnupg \
+	&& rm -rf /var/lib/apt/lists/*
 
 # ionCube Loader
 COPY ioncube/ioncube_loader_lin_${COB_PHP_VERSION}.so /usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VERSION}.so
@@ -111,9 +128,6 @@ RUN echo "zend_extension=/usr/local/etc/php/ext/ioncube_loader_lin_${COB_PHP_VER
     if [ "${COB_PHP_VERSION}" != "7.2" ] ; then apt-get install -y -qq libmcrypt-dev && docker-php-ext-install mcrypt ; fi && \
     # some apache modules
     if [ "${COB_IMAGE}" = "apache" ] ; then a2enmod rewrite && a2enmod headers && a2enmod expires; fi && \
-    if [ "${COB_IMAGE}" = "cli"] && ["${COB_PHP_VERSION}" != "5.6"] ; then pecl install swoole && echo "extension=swoole.so" >> "$PHP_INI_DIR/php.ini"; fi && \
-    dpkg -i /tmp/google-chrome-stable_current_amd64.deb && \
-    apt-get -fy install && \
-    rm /tmp/google-chrome-stable_current_amd64.deb
+    if [ "${COB_IMAGE}" = "cli"] && ["${COB_PHP_VERSION}" != "5.6"] ; then pecl install swoole && echo "extension=swoole.so" >> "$PHP_INI_DIR/php.ini"; fi
 
 CMD ["/usr/bin/start.sh"]
