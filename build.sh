@@ -9,8 +9,8 @@ build() {
         --build-arg COB_MEMCACHED_VERSION=${3} \
         --build-arg COB_IMAGE=${4} \
         --build-arg COB_XDEBUG_VERSION=${5} \
-        --build-arg COB_APCU_VERSION=${6} \
-        -q
+        --build-arg COB_APCU_VERSION=${6}# \
+        #-q
 }
 
 build 7.2 4.2.0 v3.0.4 apache
