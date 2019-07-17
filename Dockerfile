@@ -57,6 +57,7 @@ RUN apt-get update && apt-get install -y \
 	fonts-symbola \
 	fonts-noto \
 	ttf-freefont \
+	ffmpeg \
 	--no-install-recommends \
 	&& apt-get purge --auto-remove -y curl gnupg \
 	&& rm -rf /var/lib/apt/lists/*
