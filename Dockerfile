@@ -57,7 +57,7 @@ RUN apt-get update && apt-get install -y \
 	fonts-kacst \
 	fonts-symbola \
 	fonts-noto \
-	ttf-freefont \
+	fonts-freefont-ttf \
 	--no-install-recommends \
 	&& apt-get purge --auto-remove -y curl gnupg \
 	&& rm -rf /var/lib/apt/lists/*
